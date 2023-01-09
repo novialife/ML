@@ -1,0 +1,27 @@
+pipeline = Pipeline(steps=[('preprocessor',
+                    ColumnTransformer(transformers=[('num',
+                                                    Pipeline(steps=[('imputer',
+                                                                    SimpleImputer(strategy='median')),
+                                                                    ('pca',
+                                                                    PCA(n_components=n))]),
+                                                    pd.Index(['x1', 'x2', 'x3', 'x4', 'x5', 'x6', 'x8', 'x9', 'x10', 'x11', 'x13'], dtype='object')),
+                                                    ('cat',
+                                                    Pipeline(steps=[('imputer',
+                                                                    SimpleImputer(fill_value='missing',
+                                                                                    strategy='constant')),
+                                                                    ('encoder',
+                                                                    OrdinalEncoder(handle_unknown='use_encoded_value',unknown_value=-1))]),
+                                                    pd.Index(['x7', 'x12'], dtype='object'))])),
+                    ('select', SelectKBest(f_classif, k=k)),
+                    ('forest',
+                    RandomForestClassifier(max_depth=18, max_features='log2',
+                                        max_leaf_nodes=28,
+                                        max_samples=0.5555555555555556,
+                                        min_samples_leaf=16,
+                                        min_samples_split=15,
+                                        min_weight_fraction_leaf=0.05555555555555555,
+                                        n_jobs=-1, oob_score=True,
+                                        random_state=42))])
+
+
+(9, 11) 0.5451582278481013
